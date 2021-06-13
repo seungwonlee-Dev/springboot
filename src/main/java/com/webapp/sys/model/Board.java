@@ -1,8 +1,15 @@
 package com.webapp.sys.model;
 
-import javax.persistence.*;
-import javax.validation.constraints.Size;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Board {
@@ -37,5 +44,17 @@ public class Board {
 
 	public void setContent(String content) {
 		this.content = content;
+	}
+	@ManyToOne
+	@JoinColumn(name ="user_id")
+	@JsonIgnore
+	private User user;
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 }
