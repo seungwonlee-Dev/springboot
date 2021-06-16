@@ -3,8 +3,8 @@ package com.webapp.sys.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -12,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class User {
@@ -47,6 +49,7 @@ public class User {
 		this.enabled = enabled;
 	}
 	
+	@JsonIgnore
 	@ManyToMany
 	@JoinTable(
 	  name = "user_role", 
@@ -61,8 +64,18 @@ public class User {
 	public void setRoles(List<Role> roles) {
 		this.roles = roles;
 	}
+	//	사용자 정보를 가져올때 boards 정보 까지 같이 가져온다.
+	//	EAGER
+	//	- OneToOne
+	//	- ManyToOne
+	//	사용자 정보를 가져올때 boards 정보를 가져오지 않다가 boards를 사용할 때 가져온다? 기본값은 LAZY
+	//	LAZY
+	//	- OneToMany
+	//	- ManyToMany
 	
-	@OneToMany(mappedBy ="user", cascade = CascadeType.ALL, orphanRemoval = true)
+	//@OneToMany(mappedBy ="user", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy ="user", fetch = FetchType.LAZY)
+	//@JsonIgnore
 	private List<Board> boards = new ArrayList<>();
 
 	public List<Board> getBoards() {
