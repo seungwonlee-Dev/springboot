@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.webapp.sys.model.Board;
@@ -24,8 +25,17 @@ class UserApiController {
 	private UserRepository repository;
 
 	@GetMapping("/users")
-	List<User> all(){
-		List<User> users = repository.findAll();
+	List<User> all(@RequestParam(required = false) String method, @RequestParam(required = false) String text) {
+
+		List<User> users = null;
+
+		if ("query".equals(method)) {
+			users = repository.findByUsernameQuery(text);
+		} else if ("nativeQuery".equals(method)) {
+			users = repository.findByUsernameNativeQuery(text);
+		} else {
+			users = repository.findAll();
+		}
 		return users;
 	}
 
@@ -45,11 +55,11 @@ class UserApiController {
 		return repository.findById(id).map(user -> {
 //			board.setTitle(newBoard.getTitle());
 //			board.setContent(newBoard.getContent());
-			
+
 //			user.setBoards(newUser.getBoards());
 			user.getBoards().clear();
 			user.getBoards().addAll(newUser.getBoards());
-			for(Board board:user.getBoards()) {
+			for (Board board : user.getBoards()) {
 				board.setUser(user);
 			}
 			return repository.save(user);

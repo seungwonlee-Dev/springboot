@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import com.webapp.sys.model.User;
 
@@ -14,4 +15,9 @@ public interface UserRepository extends JpaRepository<User,Long>{
 	
 	User findByUsername(String username);
 	
+	@Query("select u from User u where u.username like %?1%")
+	List<User> findByUsernameQuery(String username);
+
+	@Query(value ="select * from User u where u.username like %?1%", nativeQuery=true)
+	List<User> findByUsernameNativeQuery(String username);
 }
