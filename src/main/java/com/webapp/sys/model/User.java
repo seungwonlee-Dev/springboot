@@ -2,20 +2,13 @@ package com.webapp.sys.model;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-
+import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.Data;
+
 @Entity
+@Data
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,30 +17,7 @@ public class User {
 	private String password;
 	private Boolean enabled;
 	
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
-	public String getUsername() {
-		return username;
-	}
-	public void setUsername(String username) {
-		this.username = username;
-	}
-	public String getPassword() {
-		return password;
-	}
-	public void setPassword(String password) {
-		this.password = password;
-	}
-	public Boolean getEnabled() {
-		return enabled;
-	}
-	public void setEnabled(Boolean enabled) {
-		this.enabled = enabled;
-	}
+
 	
 	@JsonIgnore
 	@ManyToMany
@@ -58,12 +28,6 @@ public class User {
 	
 	private List<Role> roles = new ArrayList<>();
 
-	public List<Role> getRoles() {
-		return roles;
-	}
-	public void setRoles(List<Role> roles) {
-		this.roles = roles;
-	}
 	//	사용자 정보를 가져올때 boards 정보 까지 같이 가져온다.
 	//	EAGER
 	//	- OneToOne
@@ -78,10 +42,4 @@ public class User {
 	@JsonIgnore
 	private List<Board> boards = new ArrayList<>();
 
-	public List<Board> getBoards() {
-		return boards;
-	}
-	public void setBoards(List<Board> boards) {
-		this.boards = boards;
-	}
 }

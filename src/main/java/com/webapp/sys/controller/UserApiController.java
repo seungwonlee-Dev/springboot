@@ -1,7 +1,5 @@
 package com.webapp.sys.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,23 +15,29 @@ import com.webapp.sys.model.Board;
 import com.webapp.sys.model.User;
 import com.webapp.sys.repository.UserRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
 @RestController
 @RequestMapping("/api")
+@Slf4j
 class UserApiController {
 
 	@Autowired
 	private UserRepository repository;
 
 	@GetMapping("/users")
-	List<User> all(@RequestParam(required = false) String method, @RequestParam(required = false) String text) {
+	Iterable<User> all(@RequestParam(required = false) String method, @RequestParam(required = false) String text) {
 
-		List<User> users = null;
+		Iterable<User> users = null;
 
 		if ("query".equals(method)) {
 			users = repository.findByUsernameQuery(text);
+
 		} else if ("nativeQuery".equals(method)) {
 			users = repository.findByUsernameNativeQuery(text);
+
 		} else {
+
 			users = repository.findAll();
 		}
 		return users;
