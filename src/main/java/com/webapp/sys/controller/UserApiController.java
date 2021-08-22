@@ -37,7 +37,6 @@ class UserApiController {
 			users = repository.findByUsernameNativeQuery(text);
 
 		} else {
-
 			users = repository.findAll();
 		}
 		return users;
